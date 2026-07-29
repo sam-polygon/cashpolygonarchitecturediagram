@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #ffffff;
+    width: 1560px;
+    padding: 40px 48px 32px 48px;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 22px;
+  }
+  .title-block h1 {
+    font-size: 22px;
+    margin: 0 0 4px 0;
+    color: #111827;
+  }
+  .title-block h2 {
+    font-size: 13px;
+    margin: 0;
+    color: #6B7280;
+    font-weight: 500;
+  }
+  .legend {
+    border: 1px solid #D1D5DB;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 11px;
+    color: #374151;
+    min-width: 300px;
+  }
+  .legend-title {
+    font-weight: 700;
+    font-size: 11px;
+    margin-bottom: 6px;
+    color: #111827;
+  }
+  .legend-row { display: flex; align-items: center; margin-bottom: 4px; }
+  .swatch { width: 14px; height: 14px; border-radius: 3px; margin-right: 8px; flex-shrink: 0; }
+
+  .flow-origin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin: 4px 0 26px 0;
+  }
+  .origin-box {
+    border: 1.5px solid #111827;
+    border-radius: 10px;
+    background: #F9FAFB;
+    padding: 10px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #111827;
+    text-align: center;
+  }
+  .origin-arrow { font-size: 18px; color: #6B7280; }
+
+  .columns {
+    display: flex;
+    gap: 28px;
+  }
+  .col {
+    flex: 1;
+    border: 1.5px solid #111827;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .col-header {
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+  .col-header.polygon { background: #4F46E5; }
+  .col-header.block { background: #111827; }
+  .col-header .sub { display:block; font-size: 10.5px; font-weight: 500; opacity: 0.85; margin-top: 2px;}
+
+  .col-body { padding: 20px 18px 8px 18px; background: #FCFCFD; }
+
+  .row {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 18px;
+  }
+  .box {
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    line-height: 1.35;
+    width: 100%;
+  }
+  .box .name { font-weight: 700; display: block; margin-bottom: 3px; }
+  .box .desc { color: #374151; font-size: 11px; }
+
+  .box.onchain { background: #EEF2FF; border: 1.6px solid #4F46E5; }
+  .box.oms { background: #F3F4F6; border: 1.6px solid #111827; }
+  .box.block { background: #F9FAFB; border: 1.6px solid #374151; }
+  .box.compliance { background: #FFFBEB; border: 1.6px solid #B45309; }
+  .box.optional { background: #F9FAFB; border: 1.6px dashed #9CA3AF; }
+  .opt-badge {
+    display: inline-block;
+    background: #ffffff;
+    border: 1px solid #9CA3AF;
+    color: #6B7280;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    border-radius: 8px;
+    padding: 1px 7px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .default-badge {
+    display: inline-block;
+    background: #111827;
+    color: #ffffff;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    border-radius: 8px;
+    padding: 1px 7px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .connector-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .connector-col {
+    flex: 1;
+  }
+  .connector-mid {
+    width: 230px;
+    flex-shrink: 0;
+    text-align: center;
+    position: relative;
+    padding-top: 6px;
+  }
+  .connector-line {
+    position: relative;
+    height: 2px;
+    background: #111827;
+    margin: 0 6px;
+  }
+  .connector-line.chain { background: #4F46E5; }
+  .connector-line::before, .connector-line::after {
+    content: "";
+    position: absolute;
+    top: -4px;
+    width: 0; height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+  }
+  .connector-line::before { left: -2px; border-right: 7px solid #111827; }
+  .connector-line::after { right: -2px; border-left: 7px solid #111827; }
+  .connector-line.chain::before { border-right-color: #4F46E5; }
+  .connector-line.chain::after { border-left-color: #4F46E5; }
+
+  .connector-label {
+    font-size: 10.5px;
+    color: #374151;
+    margin-top: 6px;
+    padding: 0 4px;
+  }
+  .step-badge {
+    display: inline-block;
+    background: #111827;
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 1px 8px;
+    margin-bottom: 4px;
+  }
+
+  .note-band {
+    margin-top: 4px;
+    border: 1.5px dashed #B45309;
+    background: #FFFBEB;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 11.5px;
+    color: #7C2D12;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .note-band .flag { font-weight: 700; color: #B45309; }
+
+  .footer {
+    margin-top: 22px;
+    border-top: 1px solid #E5E7EB;
+    padding-top: 12px;
+    font-size: 10.5px;
+    color: #6B7280;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="title-block">
+      <h1>Reference Architecture - Polygon × Block Integration</h1>
+      <h2>ST-04 · Cash App RFP · Platform-to-platform integration map (Cardio, CIS/CFS, IDS, Internal Ledger, Issuing Token Service)</h2>
+    </div>
+    <div class="legend">
+      <div class="legend-title">Legend</div>
+      <div class="legend-row"><div class="swatch" style="background:#EEF2FF;border:1.5px solid #4F46E5;"></div>On-chain / stablecoin settlement (Polygon)</div>
+      <div class="legend-row"><div class="swatch" style="background:#F3F4F6;border:1.5px solid #111827;"></div>OMS API / webhook (fiat + control plane)</div>
+      <div class="legend-row"><div class="swatch" style="background:#F9FAFB;border:1.5px solid #374151;"></div>Block-owned system</div>
+      <div class="legend-row"><div class="swatch" style="background:#FFFBEB;border:1.5px solid #B45309;"></div>Compliance / no-direct-integration note</div>
+      <div class="legend-row"><div class="swatch" style="background:#F9FAFB;border:1.5px dashed #9CA3AF;"></div>Optional integration path</div>
+    </div>
+  </div>
+
+  <div class="flow-origin">
+    <div class="origin-box">Cardholder<br>Card Tap</div>
+    <div class="origin-arrow">&#8594;</div>
+    <div class="origin-box">Visa Network</div>
+    <div class="origin-arrow">&#8594;</div>
+    <div class="origin-box">Block Issuer-Processor</div>
+    <div class="origin-arrow">&#8594;</div>
+    <div class="origin-box" style="border-color:#4F46E5;background:#EEF2FF;">Cardio<br><span style="font-weight:400;font-size:10.5px;">(auth decisioning - Block)</span></div>
+  </div>
+
+  <div class="columns">
+
+    <!-- POLYGON COLUMN -->
+    <div class="col">
+      <div class="col-header polygon">Polygon (Proposed Platform)
+        <span class="sub">Funding, settlement &amp; compliance layer (wallet custody optional)</span>
+      </div>
+      <div class="col-body">
+        <div class="row"><div class="box onchain"><span class="name">OMS API + Webhooks</span><span class="desc">Auth request intake; approve / decline / partial-auth response returned via HMAC-signed webhook</span></div></div>
+        <div class="row"><div class="box onchain"><span class="name">Balance &amp; Settlement Engine</span><span class="desc">Real-time balance verification, reserve/hold, capture, stablecoin↔fiat settlement</span></div></div>
+        <div class="row"><div class="box optional"><span class="name">Polygon WaaS<span class="opt-badge">OPTIONAL</span></span><span class="desc">Alternate wallet path for Block - Polygon provisions and manages wallets (custodial or non-custodial) per user or per token, delivering the custodial treasury-wallet model described in SC-01. Not required given Block's current wallet infrastructure (see Block Systems, right).</span></div></div>
+        <div class="row"><div class="box onchain"><span class="name">Settlement, Compliance &amp; Reporting</span><span class="desc">Polygon Chain settlement, TRM Labs / Chainalysis / Range screening, daily reconciliation &amp; statement files</span></div></div>
+      </div>
+    </div>
+
+    <!-- BLOCK COLUMN -->
+    <div class="col">
+      <div class="col-header block">Block Systems
+        <span class="sub">Card program, ledger &amp; identity layer</span>
+      </div>
+      <div class="col-body">
+        <div class="row"><div class="box block"><span class="name">Cardio</span><span class="desc">Block's authorization rules engine; issues approve / decline / partial-auth decision</span></div></div>
+        <div class="row"><div class="box block"><span class="name">Internal Ledger</span><span class="desc">Block's system of record; consumes reconciliation payloads per transaction</span></div></div>
+        <div class="row"><div class="box block"><span class="name">Current Wallet Provider<span class="default-badge">DEFAULT WALLET INFRA</span></span><span class="desc">Block's existing wallet/custody infrastructure (provider TBC); used as the default funding-instrument custody layer instead of introducing a new wallet provider</span></div></div>
+        <div class="row"><div class="box block"><span class="name">IDS</span><span class="desc">Identity / instrument data service; maps cardholder identity to the funding wallet - Block's current wallet provider by default, or a Polygon WaaS wallet if that optional path is used</span></div></div>
+        <div class="row"><div class="box block"><span class="name">CIS / CFS</span><span class="desc">Clearing &amp; settlement / reporting systems; ingest settlement confirmations and clearing files</span></div></div>
+        <div class="row"><div class="box optional"><span class="name">Issuing Token Service<span class="opt-badge">NO INTEGRATION</span></span><span class="desc">Network tokenization for Apple Pay / Google Pay; fully Block-owned. Token context passes through Cardio into the standard OMS auth payload - no direct Polygon API surface (see note below).</span></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Connector labels row (rendered between the two columns conceptually; placed below as a keyed table for clarity) -->
+  <div class="col-body" style="padding-top:0;">
+    <div class="row" style="margin-top:-2px;">
+      <div class="box" style="background:#fff;border:1px dashed #9CA3AF; width:100%;">
+        <span class="step-badge">01</span> <b>OMS API + Webhooks ↔ Cardio</b> - <span class="desc">Cardio forwards the auth request via webhook to the OMS API; OMS returns approve / decline / partial-auth. Sub-second round trip within card-network auth windows.</span><br><br>
+        <span class="step-badge">02</span> <b>Balance &amp; Settlement Engine ↔ Internal Ledger</b> - <span class="desc">Per-transaction reconciliation payloads (transaction ID, asset, amount, FX rate, fees, on-chain hash, timestamps) pushed to Block's Internal Ledger in real time, plus daily batch reconciliation files (JSON/CSV).</span><br><br>
+        <span class="step-badge">03</span> <b>Wallet / Custody Layer ↔ IDS</b> - <span class="desc">Default path: Block's current wallet infrastructure serves as the funding-instrument custody layer; IDS maps cardholder identity to that wallet. Optional path: Polygon WaaS can provision and manage the wallet instead, with the same identity-to-wallet mapping synced to IDS. No dual-wallet setup - one path is active per program.</span><br><br>
+        <span class="step-badge">04</span> <b>Settlement, Compliance &amp; Reporting ↔ CIS / CFS</b> - <span class="desc">Settlement confirmations, clearing/reporting datasets, and compliance/audit records delivered to Block's CIS/CFS on the agreed batch and real-time cadence.</span><br><br>
+        <span class="step-badge">05</span> <b>Issuing Token Service</b> - <span class="desc">No direct Polygon integration; token-level context flows through Cardio into the standard OMS auth payload (see note below).</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="note-band">
+    <span class="flag">Note -</span>
+    <span><b>Issuing Token Service</b> (network tokenization for Apple Pay / Google Pay, card-present token lifecycle) is fully Block-owned and requires no direct Polygon integration. Token-level context (token requestor ID, token state) travels with the auth request through Cardio and is passed to the OMS API as part of the standard auth payload - no separate API surface needed.</span>
+  </div>
+
+  <div class="footer">
+    <span>Polygon Labs - Funds Flow &amp; Integration Architecture</span>
+    <span>Card issuance, BIN ownership, and token lifecycle management remain fully within Block's stack</span>
+  </div>
+
+</body>
+</html>
